@@ -29,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 
 CController::CController()
 {
-	IO8bWrite(P8255MODE, 0x81);
+	IO8bWrite(P8255MODE, 0x8a);
 	//IO8bWrite(P8255A,0x00);
 }
 
