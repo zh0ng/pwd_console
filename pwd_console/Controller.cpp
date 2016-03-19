@@ -62,14 +62,14 @@ bool CController::getRowCol(int &row, int &col)
 	for (int i = 0; i < 4; i++)
 	{
 		row = i;
-		int state = IO8bRead(P8255B);
+		int state = IO8bRead(P8255A);
 		state &= 0xF0;
 		state |= (1 << i);
-		IO8bWrite(P8255B, state);
+		IO8bWrite(P8255A, state);
 
-		int c = IO8bRead(P8255C);
+		int b = IO8bRead(P8255B);
 		//CCOutput::outputInt("c=", c);
-		col = getOnePos(c);
+		col = getOnePos(b);
 		//CCOutput::outputInt("col=", col);
 		if (col != -1)
 		{
@@ -126,7 +126,7 @@ void CController::alarm()
 
 void CController::openLED(int which)
 {
-	int c = IO8bRead(P8255C) & 0x0F;
+	int c = IO8bRead(P8255C) & 0xF0;
 	CCOutput::outputInt("c=", c);
 	c |= which;
 	CCOutput::outputInt("c=", c);
@@ -142,20 +142,20 @@ void CController::delay(int t)
 	IO8bWrite(P8254_T0, 0x00);
 
 	//ÖÃ1
-	int b = IO8bRead(P8255B) & 0xFF;
-	b &= 0x7F;
-	IO8bWrite(P8255B, b);
+	int a = IO8bRead(P8255A) & 0xFF;
+	a &= 0x7F;
+	IO8bWrite(P8255A, a);
 	b |= 0x80;
-	IO8bWrite(P8255B, b);
+	IO8bWrite(P8255A, a);
 
-	int c = IO8bRead(P8255C) & 0xFF;
-	while (!(c & 0x80))
+	int b = IO8bRead(P8255B) & 0xFF;
+	while (!(b & 0x80))
 	{
-		c = IO8bRead(P8255C) & 0xFF;
-		if (c)
-			CCOutput::outputInt("c=", c);
+		b = IO8bRead(P8255B) & 0xFF;
+		if (b)
+			CCOutput::outputInt("b=", b);
 	}
-	CCOutput::outputInt("ccc=", c);
+	CCOutput::outputInt("bbb=", b);
 
 	//IO8bWrite(P8254_T0, 0x0A);
 	//IO8bWrite(P8254_T0, 0x00);
